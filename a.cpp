@@ -34,7 +34,7 @@ class ParallelHDF5File
             return *this;
         }
 
-        ParallelHDF5File& operator=(const ParallelHDF5File&& rhs) = delete;
+        ParallelHDF5File& operator=(const ParallelHDF5File& rhs) = delete;
 
         ParallelHDF5File(const std::string& name, MPI_Comm& comm, MPI_Info& info)
             : file(-1), plist_id(-1), mpi_size(-1)
