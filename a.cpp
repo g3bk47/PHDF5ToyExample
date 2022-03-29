@@ -99,7 +99,7 @@ class ParallelHDF5File
 
             for(int i=0; i!=mpi_size; ++i)
             {
-                std::string groupname = basename +  std::to_string(i);
+                std::string groupname = basename + std::to_string(i);
 
                 // all ranks participate in the creation of each group
                 groups[i] = H5Gcreate (file, groupname.c_str(), H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
@@ -157,8 +157,6 @@ class ParallelHDF5File
                 std::cerr<<"ERROR: cannot close space"<<std::endl;
                 std::exit(EXIT_FAILURE);
             }
-
-
         }
 
         // for each group, create a dataset with the size required by each rank (can be different among ranks), has to be called by all ranks for all datasets
@@ -222,7 +220,7 @@ class ParallelHDF5File
         }
 
         // write the actual data to the file. This can be called by individual ranks
-        void write_array_to_dataset(const std::shared_ptr<std::vector<std::pair<hid_t,hid_t>>> datasets, int rank, const std::vector<int>& data)
+        void write_array_to_dataset(const std::shared_ptr<std::vector<std::pair<hid_t,hid_t>>>& datasets, int rank, const std::vector<int>& data)
         {
             herr_t ret = H5Dwrite ((*datasets)[rank].first, H5T_NATIVE_INT, H5S_ALL, H5S_ALL, H5P_DEFAULT, data.data());
             if (ret == -1)
@@ -247,7 +245,6 @@ int main (int argc, char **argv)
     MPI_Init(&argc, &argv);
     MPI_Comm_size(comm, &mpi_size);
     MPI_Comm_rank(comm, &mpi_rank);
-
 
     {
         ParallelHDF5File File("SDS_row.h5", comm, info);
